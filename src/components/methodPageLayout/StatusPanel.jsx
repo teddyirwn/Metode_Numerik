@@ -10,7 +10,7 @@ export default function StatusPanel({
     typeof val === "number" && !isNaN(val) ? val.toFixed(6) : "-";
 
   return (
-    <div className="rounded-md bg-slate-800 p-4 mt-6 max-w-72 w-full">
+    <div className="rounded-md bg-slate-800 p-4 mt-6 lg:max-w-72 w-full">
       <h3 className="card-title text-white">Status</h3>
 
       <div className="flex flex-col gap-4 mt-3">
