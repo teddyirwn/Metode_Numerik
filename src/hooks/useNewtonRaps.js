@@ -1,20 +1,13 @@
 import { useState } from "react";
 
-// ubah string menjadi fungsi JS
-const parseFunction = (fxStr) => new Function("x", `return ${fxStr};`);
+const f = (x) => -Math.exp(-x) + x;
+const fPrime = (x) => Math.exp(-x) + 1;
 
-// Turunan numerik (central difference)
-const derivative =
-  (f, h = 1e-6) =>
-  (x) =>
-    (f(x + h) - f(x - h)) / (2 * h);
-
-// Status berdasarkan |f(x)| seperti Python
+// status per toleransi
 const getStatus = (fx, tol) => (Math.abs(fx) <= tol ? "Berhenti" : "Lanjut");
 
 export function useNewtonRaph() {
   const [values, setValues] = useState({
-    fx: "Math.exp(-x) - x", // f(x) = e^-x - x
     x0: 0,
     maxIter: 10,
   });
@@ -28,13 +21,10 @@ export function useNewtonRaph() {
     setValues((v) => ({ ...v, [key]: Number(value) }));
 
   const iterate = () => {
-    const f = parseFunction(values.fx);
-    const fPrime = derivative(f);
-
     let x0 = values.x0;
     const newHistory = [];
     const newPoints = [];
-    const tolerances = [0.1, 0.01, 0.001, 0.0001];
+    const visualTolerances = [0.1, 0.01, 0.001, 0.0001];
 
     for (let i = 1; i <= values.maxIter; i++) {
       const fxVal = f(x0);
@@ -47,26 +37,24 @@ export function useNewtonRaph() {
 
       const x1 = x0 - fxVal / fpxVal;
 
-      // Status tiap toleransi
+      // status tiap toleransi
       const statusCols = {};
-      tolerances.forEach((t) => {
+      visualTolerances.forEach((t) => {
         statusCols[`s${t}`] = getStatus(fxVal, t);
       });
 
-      // Push ke history (tabel)
       newHistory.push({
         iter: i,
         x: x0.toFixed(8),
         fx: fxVal.toFixed(8),
-        fpx: fpxVal.toFixed(8),
+        "f'x": Number(fpxVal.toFixed(8)),
         ...statusCols,
+        xNext: x1.toFixed(8),
       });
 
-      // Push ke points untuk FunctionGraph
-      newPoints.push({ x: x0, fx: fxVal });
+      newPoints.push({ x: x0, y: fxVal });
 
-      x0 = x1;
-      // **Jangan break** agar iterasi tetap sampai maxIter
+      x0 = x1; // update x
     }
 
     setHistory(newHistory);
@@ -91,7 +79,7 @@ export function useNewtonRaph() {
     points,
     root,
     status: { iteration, root },
-    graph: parseFunction(values.fx),
+    graph: f,
     method: "newton",
   };
 }

@@ -10,7 +10,7 @@ export default function MetodeSecant() {
   const solver = useSecant();
 
   return (
-    <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-10 py-8">
+    <div className=" mx-auto px-4 sm:px-6 lg:px-16 py-8">
       <PageHeader
         title="Metode Secant"
         description="Pendekatan akar dengan interpolasi linear"
@@ -24,8 +24,7 @@ export default function MetodeSecant() {
           <ActionButtons {...solver} />
         </div>
 
-        {/* Graph */}
-        <div className="w-full lg:w-2/3">
+        <div className="w-full">
           <FunctionGraph
             f={(x) => x * Math.exp(-x) + Math.cos(2 * x)}
             points={solver.points}

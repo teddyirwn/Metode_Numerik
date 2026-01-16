@@ -12,7 +12,7 @@ export default function ParameterInput({ method, values, onChange }) {
   }
 
   return (
-    <div className="bg-slate-800 p-4 rounded-md w-full sm:w-72 md:w-64 flex flex-col gap-3">
+    <div className="bg-slate-800 p-4 rounded-md w-80 sm:w-72 flex flex-col gap-3">
       <h3 className="text-lg sm:text-base md:text-lg font-bold border-b pb-1">
         Parameter
       </h3>
